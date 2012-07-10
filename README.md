@@ -2,6 +2,7 @@ miniredis-ruby
 ==============
 
 A redis client in ruby. Really lightweight! Only 28 lines! :)
+
 Usage: 
 
 ```ruby

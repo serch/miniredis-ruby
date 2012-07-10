@@ -19,14 +19,18 @@ class MiniRedis
     @socket.print "*#{args.length}\r\n"
     args.each {|s| @socket.print "$#{s.to_s.length}\r\n#{s}\r\n"}
     
+    parse_response
+  end
+  
+  def parse_response
     reply = @socket.gets
-    type, body = reply[0], reply[1..-3]
+    type, body = reply[0..0], reply[1..-3]
     case type
     when '+' then body
     when '-' then raise StandardError.new(body)
     when ':' then body.to_i
     when '$' then read_bulk(body.to_i)
-    when '*' then body.to_i.times.map {read_bulk(@socket.gets[1..-3].to_i)}
+    when '*' then body.to_i.times.map {parse_response}
     else 'unknown return value'
     end
   end
