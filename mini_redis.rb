@@ -30,7 +30,7 @@ class MiniRedis
     when '-' then raise StandardError.new(body)
     when ':' then body.to_i
     when '$' then read_bulk(body.to_i)
-    when '*' then body.to_i.times.map {parse_response}
+    when '*' then i = body.to_i; i == -1 ? nil : i.times.map {parse_response}
     else 'unknown return value'
     end
   end
